@@ -12,19 +12,19 @@ Finance AI is a Python-based application for financial data analysis, anomaly de
 ## Project Structure
 
 ```
-analysis.py            # Financial data analysis logic
-anomaly.py             # Anomaly detection algorithms
-app.py                 # Backend server (likely Flask or FastAPI)
-data_loader.py         # Data loading utilities
-llm_service.py         # LLM integration and service logic
-main.py                # Entry point or orchestrator
-requirements.txt       # Python dependencies
-sample_data.csv        # Example financial data
-sample_data_volatile.csv # Example volatile data
+backend/
+   analysis.py            # Financial data analysis logic
+   anomaly.py             # Anomaly detection algorithms
+   data_loader.py         # Data loading utilities
+   llm_service.py         # LLM integration and service logic
+   main.py                # Entry point or orchestrator
 frontend/
   app.js               # Frontend JavaScript
   index.html           # Main HTML page
   style.css            # Stylesheet
+requirements.txt       # Python dependencies
+sample_data.csv        # Example financial data
+sample_data_volatile.csv # Example volatile data
 ```
 
 ## Getting Started
