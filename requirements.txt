@@ -1,0 +1,9 @@
+pandas
+numpy
+fastapi
+uvicorn
+groq
+streamlit
+plotly
+python-dotenv
+python-multipart
