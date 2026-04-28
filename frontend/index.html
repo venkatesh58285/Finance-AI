@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinanceNarrate AI – Executive Financial Insight Engine</title>
+  <meta name="description" content="AI-powered financial analysis that turns raw CSV data into boardroom-ready executive summaries, anomaly detection and interactive charts." />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Animated Mesh Background -->
+  <div class="mesh-bg" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════════════════
+       LOADING OVERLAY
+       ════════════════════════════════════════════════════ -->
+  <div id="loading" class="hidden" role="status" aria-live="polite">
+    <div class="loader-ring"></div>
+    <p><strong>Analysing your financial data…</strong></p>
+    <p>Detecting anomalies &amp; generating AI insights</p>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       HOME / LANDING PAGE
+       ════════════════════════════════════════════════════ -->
+  <div id="home-page">
+
+    <!-- Navbar -->
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="nav-brand">
+        <div class="nav-brand-icon" aria-hidden="true">💡</div>
+        <span class="nav-brand-name">FinanceNarrate AI</span>
+      </div>
+      <div class="nav-links" role="list">
+        <a href="#features" role="listitem">Features</a>
+        <a href="#upload"   role="listitem">Get Started</a>
+        <a href="#about"    role="listitem">About</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-outline btn-sm" onclick="scrollToUpload()">Documentation</button>
+        <button class="btn btn-primary btn-sm" onclick="scrollToUpload()">Try it Free</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero" aria-labelledby="hero-heading">
+      <div class="hero-text">
+        <div class="hero-badge"><span></span> AI-Powered Financial Intelligence</div>
+        <h1 id="hero-heading">
+          Turn Raw Data Into<br />
+          <span class="grad">Boardroom Narratives</span>
+        </h1>
+        <p>Upload your CSV and receive an AI-generated executive summary, anomaly alerts, and interactive charts — all in under 30 seconds.</p>
+        <div class="hero-actions">
+          <button id="hero-upload-btn" class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+            ⚡ Start Analysing Now
+          </button>
+          <button class="btn btn-outline" onclick="loadSampleData()">
+            📊 Try Sample Data
+          </button>
+        </div>
+        <p class="hero-note">No signup · No credit card · CSV only (month, revenue, expenses)</p>
+      </div>
+
+      <!-- Floating Preview Card -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="preview-card glass">
+          <div class="preview-bar">
+            <div class="preview-dots"><span></span><span></span><span></span></div>
+            <span class="preview-bar-title">Financial Dashboard — FY 2024</span>
+          </div>
+          <div class="preview-body">
+            <div class="preview-kpis">
+              <div class="pkpi">
+                <div class="pkpi-val g">$2.4M</div>
+                <div class="pkpi-label">Revenue</div>
+              </div>
+              <div class="pkpi">
+                <div class="pkpi-val b">34.2%</div>
+                <div class="pkpi-label">Margin</div>
+              </div>
+              <div class="pkpi">
+                <div class="pkpi-val r">2</div>
+                <div class="pkpi-label">Anomalies</div>
+              </div>
+            </div>
+            <div class="preview-chart-wrap">
+              <svg viewBox="0 0 320 130" class="chart-svg" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#6366f1" stop-opacity=".35"/>
+                    <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,110 C40,90 60,100 80,75 S120,65 140,80 S200,50 230,40 S280,30 320,20" fill="url(#lg)" stroke="none"/>
+                <polyline fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"
+                  points="0,110 40,90 80,75 120,68 160,80 200,50 240,38 280,30 320,20"/>
+                <polyline fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="5,3"
+                  points="0,90 40,88 80,95 120,85 160,97 200,80 240,75 280,70 320,65"/>
+                <circle cx="80"  cy="75" r="5" fill="#f59e0b"/>
+                <circle cx="160" cy="80" r="5" fill="#f59e0b"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip" aria-label="Product statistics">
+      <div class="stat-item">
+        <div class="stat-value">30s</div>
+        <div class="stat-label">Average Analysis Time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">99%</div>
+        <div class="stat-label">Anomaly Accuracy</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">LLM</div>
+        <div class="stat-label">AI-Generated Summaries</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Data Stored Externally</div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="section" id="features" aria-labelledby="features-heading">
+      <div class="section-header">
+        <span class="section-label">What we do</span>
+        <h2 class="section-title" id="features-heading">Powerful Features for Modern Finance Teams</h2>
+        <p class="section-sub">Everything you need to go from raw spreadsheet to executive decision, in one click.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feat-card fade-up">
+          <span class="feat-icon">🤖</span>
+          <h3>AI Narrative Engine</h3>
+          <p>Groq-powered LLM generates concise, highlight-tagged executive summaries tailored for board presentations.</p>
+        </div>
+        <div class="feat-card fade-up">
+          <span class="feat-icon">🔍</span>
+          <h3>Anomaly Detection</h3>
+          <p>Z-score statistical analysis flags unusual spikes in revenue or expenses and visually marks them on charts.</p>
+        </div>
+        <div class="feat-card fade-up">
+          <span class="feat-icon">📈</span>
+          <h3>Interactive Visualisations</h3>
+          <p>Plotly-powered charts — revenue vs expenses trends, profit margin curves, and expense breakdowns.</p>
+        </div>
+        <div class="feat-card fade-up">
+          <span class="feat-icon">📋</span>
+          <h3>Rule-Based Flags</h3>
+          <p>Automatic detection of Revenue Decline (&gt;15%), Expense Spikes (&gt;20%), and Loss Periods.</p>
+        </div>
+        <div class="feat-card fade-up">
+          <span class="feat-icon">📊</span>
+          <h3>KPI Dashboard</h3>
+          <p>Instant KPI cards for total revenue, profit, margin %, anomaly count, and period count.</p>
+        </div>
+        <div class="feat-card fade-up">
+          <span class="feat-icon">🔒</span>
+          <h3>Privacy First</h3>
+          <p>All processing happens on your own machine. No data is stored or sent to third-party servers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload / Get Started Section -->
+    <section class="section" id="upload" aria-labelledby="upload-heading">
+      <div class="section-header">
+        <span class="section-label">Get Started</span>
+        <h2 class="section-title" id="upload-heading">Analyse Your Data in Seconds</h2>
+        <p class="section-sub">Drop your CSV and let the AI do the rest.</p>
+      </div>
+      <div class="upload-wrap">
+        <div class="drop-zone glass" id="drop-zone" role="button" tabindex="0" aria-label="Drop CSV file here or click to choose">
+          <span class="drop-icon">📁</span>
+          <h3>Drop Your Financial CSV Here</h3>
+          <p>or click to browse — or use sample data below</p>
+          <input type="file" id="file-input" accept=".csv" hidden aria-label="CSV file upload" />
+          <div class="drop-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
+            <button class="btn btn-outline" onclick="loadSampleData()">Try Sample Data</button>
+          </div>
+          <p class="drop-format">Required columns: <code>month</code>, <code>revenue</code>, <code>expenses</code></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about" aria-labelledby="about-heading">
+      <div class="section-header">
+        <span class="section-label">About</span>
+        <h2 class="section-title" id="about-heading">Built for Speed &amp; Clarity</h2>
+        <p class="section-sub">FinanceNarrate AI combines rule-based heuristics, statistical anomaly detection, and large-language models to deliver insights at the speed of AI.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2024 FinanceNarrate AI &nbsp;·&nbsp; Built with FastAPI, Plotly &amp; Groq</p>
+    </footer>
+  </div><!-- /#home-page -->
+
+
+  <!-- ════════════════════════════════════════════════════
+       DASHBOARD APP SHELL  (hidden until data loaded)
+       ════════════════════════════════════════════════════ -->
+  <div id="app-shell" class="hidden">
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Toggle sidebar">☰</button>
+    <div class="sidebar-overlay hidden" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="App sidebar">
+      <div class="sidebar-brand">
+        <div class="sb-icon" aria-hidden="true">💡</div>
+        <div>
+          <div class="sb-name">FinanceNarrate</div>
+          <div class="sb-sub">AI Insights</div>
+        </div>
+      </div>
+
+      <div class="sidebar-label">Main</div>
+      <button class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+        <span class="ni-icon">📊</span> Dashboard
+      </button>
+      <button class="nav-item" id="nav-analytics" onclick="showPage('analytics')">
+        <span class="ni-icon">📈</span> Analytics
+      </button>
+      <button class="nav-item" id="nav-reports" onclick="showPage('reports')">
+        <span class="ni-icon">📄</span> Data Report
+      </button>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline btn-sm" style="width:100%" onclick="goHome()">
+          ← New Analysis
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="app-main" id="app-main">
+
+      <!-- Top Bar -->
+      <header class="app-topbar">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-right">
+          <span class="badge badge-green topbar-badge" id="topbar-status">✓ Analysis Complete</span>
+          <button class="btn btn-primary btn-sm new-analysis-btn" onclick="goHome()">+ New Analysis</button>
+        </div>
+      </header>
+
+      <!-- ── DASHBOARD PAGE ── -->
+      <div id="page-dashboard" class="page-content">
+        <div class="page-header">
+          <h2>Financial Insights Dashboard</h2>
+          <p>AI-generated executive summary with anomaly detection and performance KPIs.</p>
+        </div>
+
+        <!-- KPI Row -->
+        <div class="kpi-row" id="kpi-row">
+          <div class="kpi-card kpi-blue fade-up">
+            <span class="kpi-icon">💰</span>
+            <div class="kpi-val" id="kpi-revenue">—</div>
+            <div class="kpi-label">Total Revenue</div>
+          </div>
+          <div class="kpi-card kpi-green fade-up">
+            <span class="kpi-icon">📈</span>
+            <div class="kpi-val" id="kpi-profit">—</div>
+            <div class="kpi-label">Total Profit</div>
+          </div>
+          <div class="kpi-card kpi-cyan fade-up">
+            <span class="kpi-icon">🎯</span>
+            <div class="kpi-val" id="kpi-margin">—</div>
+            <div class="kpi-label">Avg. Profit Margin</div>
+          </div>
+          <div class="kpi-card kpi-red fade-up">
+            <span class="kpi-icon">⚠️</span>
+            <div class="kpi-val" id="kpi-anomalies">—</div>
+            <div class="kpi-label">Anomalies Detected</div>
+          </div>
+          <div class="kpi-card kpi-yellow fade-up">
+            <span class="kpi-icon">📅</span>
+            <div class="kpi-val" id="kpi-periods">—</div>
+            <div class="kpi-label">Periods Analysed</div>
+          </div>
+        </div>
+
+        <!-- Main grid: Summary + Chart -->
+        <div class="dash-grid">
+          <!-- Left: Summary + Flags -->
+          <div style="display:flex;flex-direction:column;gap:1.5rem">
+            <!-- Executive Summary -->
+            <div class="glass fade-up">
+              <div class="panel-title"><span class="pt-icon">✨</span> AI Executive Summary</div>
+              <div class="summary-content" id="summary-content">
+                <p style="color:var(--muted)">Generating summary…</p>
+              </div>
+            </div>
+
+            <!-- Flags -->
+            <div class="glass fade-up">
+              <div class="panel-title"><span class="pt-icon">🚦</span> Performance Flags</div>
+              <div class="insights-flags">
+                <div class="flag-item">
+                  <div class="flag-dot green"></div>
+                  <div>
+                    <div class="flag-label">Trend Analysis</div>
+                    <div class="flag-value" id="flag-trends">—</div>
+                  </div>
+                </div>
+                <div class="flag-item">
+                  <div class="flag-dot yellow"></div>
+                  <div>
+                    <div class="flag-label">Anomalies</div>
+                    <div class="flag-value" id="flag-anomalies">—</div>
+                  </div>
+                </div>
+                <div class="flag-item">
+                  <div class="flag-dot green"></div>
+                  <div>
+                    <div class="flag-label">Profit Analysis</div>
+                    <div class="flag-value" id="flag-profit">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Main Chart -->
+          <div class="glass fade-up">
+            <div class="panel-title"><span class="pt-icon">📈</span> Revenue, Expenses &amp; Profit Over Time</div>
+            <div class="chart-container" id="main-chart"></div>
+          </div>
+        </div>
+      </div><!-- /#page-dashboard -->
+
+      <!-- ── ANALYTICS PAGE ── -->
+      <div id="page-analytics" class="page-content hidden">
+        <div class="page-header">
+          <h2>Advanced Analytics</h2>
+          <p>Deep-dive charts: profit margin trends and financial breakdown.</p>
+        </div>
+        <div class="analytics-grid">
+          <div class="glass fade-up">
+            <div class="panel-title"><span class="pt-icon">📊</span> Profit Margin Trend (%)</div>
+            <div class="chart-container-sm" id="margin-chart"></div>
+          </div>
+          <div class="glass fade-up">
+            <div class="panel-title"><span class="pt-icon">🥧</span> Financial Breakdown</div>
+            <div class="chart-container-sm" id="breakdown-chart"></div>
+          </div>
+          <div class="glass fade-up" style="grid-column:1/-1">
+            <div class="panel-title"><span class="pt-icon">📉</span> Month-on-Month Growth (%)</div>
+            <div class="chart-container-sm" id="growth-chart"></div>
+          </div>
+        </div>
+      </div><!-- /#page-analytics -->
+
+      <!-- ── REPORTS PAGE ── -->
+      <div id="page-reports" class="page-content hidden">
+        <div class="page-header">
+          <h2>Detailed Data Report</h2>
+          <p>Full processed dataset with computed columns, flags, and anomaly markers.</p>
+        </div>
+        <div class="glass fade-up">
+          <div class="panel-title"><span class="pt-icon">📄</span> Processed Financial Data</div>
+          <div class="table-wrap">
+            <table id="data-table" aria-label="Processed financial data">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Revenue</th>
+                  <th>Expenses</th>
+                  <th>Profit</th>
+                  <th>Rev Growth %</th>
+                  <th>Exp Growth %</th>
+                  <th>Flags</th>
+                  <th>Rev Anomaly</th>
+                  <th>Exp Anomaly</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div><!-- /#page-reports -->
+
+    </main>
+  </div><!-- /#app-shell -->
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
